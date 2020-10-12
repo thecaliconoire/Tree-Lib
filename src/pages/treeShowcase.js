@@ -9,6 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import fetch from 'isomorphic-fetch'
+import _get from 'lodash'
 
 const useStyles = makeStyles({
   root: {
@@ -25,26 +26,38 @@ const TreeShowcase = () => {
   const [data, setData] = useState({ trees: [] })
   const [showResults, setShowResults] = React.useState(false)
 
-  const handleChange = (data) => {
-    setShowResults(prev => !prev)
+  const TreeData = () => {
+    useEffect(() => {
+      const fetchData = async () => {
+        const response = await fetch('https://s3.eu-central-1.amazonaws.com/ecosia-frontend-developer/trees.json')
+        const data = await response.json()
+        console.log(data)
+        setData(data)
+      }
+      fetchData()
+    }, [])
+    return data
   }
+  TreeData()
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch('https://s3.eu-central-1.amazonaws.com/ecosia-frontend-developer/trees.json')
-      const data = await response.json()
-      console.log(data)
-      setData(data)
-    }
-    fetchData()
-  }, [])
+  const handleChange = (name) => {
+    const trees = data.trees.map(tree => {
+      if (tree.name !== name) {
+      // Do an equivelency check here, if the tree names are equivelent show the tree, if not don't show it.
+        return { ...tree, hidden: !tree.hidden }
+      }
+      return tree
+    })
+    // show => !show
+    setShowResults({ trees })
+  }
 
   return (
     <Grid container className={classes.root} spacing={2}>
       <Grid item xs={12}>
         <Grid container spacing={2}>
           {data.trees.map(tree => (
-            <Grid key={tree.name} item xs={3} spacing={2}>
+            <Grid key={tree.name} item xs={3}>
               {showResults
                 ? <Card className={classes.tree_card}>
                   <CardActionArea>

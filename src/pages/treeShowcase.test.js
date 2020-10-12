@@ -20,12 +20,12 @@ afterEach(() => {
   rootContainer = null
 })
 
-beforeEach(() => {
+const beforeEach(() => {
   rootContainer = document.createElement('div')
   document.body.appendChild(rootContainer)
 })
 
-afterEach(() => {
+const afterEach(() => {
   document.body.removeChild(rootContainer)
   rootContainer = null
 })
