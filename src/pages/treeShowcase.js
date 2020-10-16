@@ -108,9 +108,13 @@ const TreeShowcase = () => {
                 </Collapse>
               </CardActionArea>
               <CardActions className={classes.cardActions}>
-                <Button size='small' color='primary' onClick={() => handleChange(tree.name)}>
+                {!tree.hidden
+                  ? <Button size='small' color='primary' onClick={() => handleChange(tree.name)}>
                   Hide Image
-                </Button>
+                  </Button>
+                  : <Button size='small' color='primary' onClick={() => handleChange(tree.name)}>
+                 Show Image
+                  </Button>}
               </CardActions>
             </Card>
           </Grid>
